@@ -1,4 +1,4 @@
-module github.com/cmdctl/dotfiles-cli
+module github.com/cmdctl/dotfiles
 
 go 1.17
 
