@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	ssh "github.com/go-git/go-git/v5/plumbing/transport/ssh"
 	"io"
 	"io/ioutil"
 	"os"
@@ -10,6 +11,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Config holds the configuration contained in .dotfiles.yml
 type Config struct {
 	Version      string   `yaml:"version"`
 	TrackedFiles []string `yaml:"include"`
@@ -45,15 +47,26 @@ func main() {
 }
 
 func commitChanges(repo *git.Repository) error {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
 	worktree, err := repo.Worktree()
 	if err != nil {
 		return err
 	}
 	_, _ = worktree.Add(".")
 	_, _ = worktree.Commit("changes to dotfiles", &git.CommitOptions{})
-	remote, err := repo.Remote("origin")
-	if err == nil {
-		remote.Push(&git.PushOptions{})
+	auth, err := publicKey(home)
+	if err != nil {
+		panic(err)
+	}
+	err = repo.Push(&git.PushOptions{
+		RemoteName: "origin",
+		Auth:       auth,
+	})
+	if err != nil {
+		fmt.Printf("could not push changes to remote: %s", err)
 	}
 	return nil
 }
@@ -112,4 +125,15 @@ func getDotfilesRepo(home string) (*git.Repository, error) {
 	fmt.Printf("Opening %s repository...\n", repoName)
 	repo, err := git.PlainOpen(repoName)
 	return repo, err
+}
+
+func publicKey(home string) (*ssh.PublicKeys, error) {
+	var publicKey *ssh.PublicKeys
+	sshPath := home + "/.ssh/id_ecdsa"
+	sshKey, _ := ioutil.ReadFile(sshPath)
+	publicKey, err := ssh.NewPublicKeys("git", []byte(sshKey), "")
+	if err != nil {
+		return nil, err
+	}
+	return publicKey, err
 }
