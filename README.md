@@ -47,6 +47,7 @@ If you add a remote to the repository created by the `dotfiles` executable it wi
 each run.
 
 > You can also add the binary to your `~/.zshrc` profile so that a sync is done on every new terminal session.
+> Here is an example of my [~/.zshrc config](https://github.com/cmdctl/.dotfiles/blob/37d2f321c0be279d4d0fe79db8f4d5b4fc634120/.zshrc#L16) where the binary is run on startup.
 
 
 
