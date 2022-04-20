@@ -25,6 +25,11 @@ go install github.com/cmdctl/dotfiles@latest
 Or you can download the executables from the [releases page](https://github.com/cmdctl/dotfiles/releases/tag/v0.1.2)
 
 ## Usage
+GitHub recently deprecated the usage of RSA SHA-1 ssh keys for programmatic usage.
+You would need to generate an ECDSA ssh key and add it to you GitHub account to enable sync to remote functionality.
+```
+ssh-keygen -t ecdsa
+```
 Create the following `.dotfiles.yml` at your `HOME` directory
 ```
 touch ~/.dotfiles.yml
