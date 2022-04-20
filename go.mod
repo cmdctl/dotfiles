@@ -5,6 +5,14 @@ go 1.17
 require github.com/go-git/go-git/v5 v5.4.2
 
 require (
+	github.com/go-git/go-git-fixtures/v4 v4.2.1 // indirect
+	github.com/jessevdk/go-flags v1.5.0 // indirect
+	github.com/kr/pretty v0.2.1 // indirect
+	github.com/kr/text v0.2.0 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+)
+
+require (
 	github.com/Microsoft/go-winio v0.4.16 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20210428141323-04723f9f07d7 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect

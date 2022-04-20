@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 
@@ -27,11 +28,11 @@ func main() {
 
 	config := readConfig(home)
 	for _, file := range config.TrackedFiles {
-		err := os.Rename(fmt.Sprintf("%s/%s", home, file), fmt.Sprintf("%s/%s", getRepoName(home), file))
+		_, err := copy(fmt.Sprintf("%s/%s", home, file), fmt.Sprintf("%s/%s", getRepoName(home), file))
 		if err != nil {
 			panic(err)
 		}
-		err = os.Symlink(fmt.Sprintf("%s/%s", getRepoName(home), file), fmt.Sprintf("%s/%s", home, file))
+		err = os.Chmod(fmt.Sprintf("%s/%s", getRepoName(home), file), 0600)
 		if err != nil {
 			panic(err)
 		}
@@ -55,6 +56,31 @@ func commitChanges(repo *git.Repository) error {
 		remote.Push(&git.PushOptions{})
 	}
 	return nil
+}
+
+func copy(src, dst string) (int64, error) {
+	sourceFileStat, err := os.Stat(src)
+	if err != nil {
+		return 0, err
+	}
+
+	if !sourceFileStat.Mode().IsRegular() {
+		return 0, fmt.Errorf("%s is not a regular file", src)
+	}
+
+	source, err := os.Open(src)
+	if err != nil {
+		return 0, err
+	}
+	defer source.Close()
+
+	destination, err := os.Create(dst)
+	if err != nil {
+		return 0, err
+	}
+	defer destination.Close()
+	nBytes, err := io.Copy(destination, source)
+	return nBytes, err
 }
 
 func readConfig(home string) Config {
