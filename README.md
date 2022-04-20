@@ -42,7 +42,8 @@ Then run in your terminal
 ```
 dotfiles
 ```
-This will create a new repository in ~/.dotfiles directory and copy the specified files
+This will create a new repository in **~/.dotfiles** directory and copy the specified files.
+
 If you add a remote to the repository created by the `dotfiles` executable it will automatically push the changes on
 each run.
 
