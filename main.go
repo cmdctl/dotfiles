@@ -20,7 +20,7 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("Syncing dotfiles changes to dotfiles repository...")
-	repo, err := initRepo(home)
+	repo, err := getDotfilesRepo(home)
 	if err != nil {
 		panic(err)
 	}
@@ -73,7 +73,7 @@ func readConfig(home string) Config {
 func getRepoName(home string) string {
 	return fmt.Sprintf("%s/.dotfiles", home)
 }
-func initRepo(home string) (*git.Repository, error) {
+func getDotfilesRepo(home string) (*git.Repository, error) {
 	repoName := getRepoName(home)
 	if _, err := os.Stat(fmt.Sprintf("%s/%s", repoName, ".git")); os.IsNotExist(err) {
 		fmt.Printf("Repo does not exist, initializing a repository for tracking dotfiles at %s...\n", repoName)
