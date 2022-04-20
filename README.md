@@ -42,6 +42,9 @@ Then run in your terminal
 ```
 dotfiles
 ```
+This will create a new repository in ~/.dotfiles directory and copy the specified files
+If you add a remote to the repository created by the `dotfiles` executable it will automatically push the changes on
+each run.
 
 You can also add the binary to your `~/.zshrc` profile so that a sync is done on every new terminal session.
 
