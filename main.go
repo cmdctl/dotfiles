@@ -55,8 +55,14 @@ func commitChanges(repo *git.Repository) error {
 	if err != nil {
 		return err
 	}
-	_, _ = worktree.Add(".")
-	_, _ = worktree.Commit("changes to dotfiles", &git.CommitOptions{})
+	_, err = worktree.Add(".")
+	if err != nil {
+		return fmt.Errorf("could not add files to git %s", err.Error())
+	}
+	_, err = worktree.Commit("changes to dotfiles", &git.CommitOptions{})
+	if err != nil {
+		return fmt.Errorf("could not commit files to git %s", err.Error())
+	}
 	auth, err := publicKey(home)
 	if err != nil {
 		panic(err)
@@ -129,7 +135,7 @@ func getDotfilesRepo(home string) (*git.Repository, error) {
 
 func publicKey(home string) (*ssh.PublicKeys, error) {
 	var publicKey *ssh.PublicKeys
-	sshPath := home + "/.ssh/id_ecdsa"
+	sshPath := home + "/.ssh/id_ed25519"
 	sshKey, _ := ioutil.ReadFile(sshPath)
 	publicKey, err := ssh.NewPublicKeys("git", []byte(sshKey), "")
 	if err != nil {
