@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Syncing dotfiles changes to dotfiles repository...")
+	// fmt.Println("Syncing dotfiles changes to dotfiles repository...")
 	repo, err := getDotfilesRepo(home)
 	if err != nil {
 		panic(err)
@@ -43,7 +43,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Done!")
+	// fmt.Println("Done!")
 }
 
 func commitChanges(repo *git.Repository) error {
@@ -128,7 +128,7 @@ func getDotfilesRepo(home string) (*git.Repository, error) {
 		}
 		return repo, nil
 	}
-	fmt.Printf("Opening %s repository...\n", repoName)
+	// fmt.Printf("Opening %s repository...\n", repoName)
 	repo, err := git.PlainOpen(repoName)
 	return repo, err
 }
